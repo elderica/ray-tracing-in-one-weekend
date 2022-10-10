@@ -1,4 +1,5 @@
 use std::fmt::Display;
+use std::ops;
 
 pub struct Color {
     r: f64,
@@ -23,8 +24,6 @@ impl Display for Color {
         )
     }
 }
-
-use std::ops;
 
 #[derive(Clone, Copy)]
 pub struct Vec3(f64, f64, f64);
@@ -102,7 +101,7 @@ impl ops::DivAssign<f64> for Vec3 {
     }
 }
 
-impl std::fmt::Display for Vec3 {
+impl Display for Vec3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} {} {}", self.0, self.1, self.2)
     }
