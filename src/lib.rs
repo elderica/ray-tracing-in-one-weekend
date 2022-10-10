@@ -290,7 +290,7 @@ impl HitTable for Sphere {
 
         let t = root;
         let p = r.at(t);
-        let outward_normal = (p - self.center) / self.radius;
+        let outward_normal = (p - *self.center()) / self.radius();
         let h = HitRecord::new(p, t).set_face_normal(r, &outward_normal);
 
         Some(h)
