@@ -248,6 +248,10 @@ impl HitRecord {
     pub fn t(&self) -> f64 {
         self.t
     }
+
+    pub fn normal(&self) -> Vec3 {
+        self.normal
+    }
 }
 
 pub trait HitTable {
