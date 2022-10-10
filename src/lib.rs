@@ -162,3 +162,28 @@ pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
 pub fn unit_vector(v: &Vec3) -> Vec3 {
     v.to_owned() / v.length()
 }
+
+pub type Point3 = Vec3;
+
+pub struct Ray {
+    origin: Point3,
+    direction: Vec3,
+}
+
+impl Ray {
+    pub fn new(origin: Point3, direction: Vec3) -> Self {
+        Self { origin, direction }
+    }
+
+    pub fn origin(&self) -> &Point3 {
+        &self.origin
+    }
+
+    pub fn direction(&self) -> &Vec3 {
+        &self.direction
+    }
+
+    pub fn at(&self, t: f64) -> Point3 {
+        self.origin + t * self.direction
+    }
+}
