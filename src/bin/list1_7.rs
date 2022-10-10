@@ -1,4 +1,4 @@
-use ray_tracing_in_one_weekend::{Color, Vec3};
+use ray_tracing_in_one_weekend::Color;
 use std::io::{self, BufWriter, Write};
 
 fn main() -> io::Result<()> {
@@ -21,8 +21,7 @@ fn main() -> io::Result<()> {
             let r = i as f64 / (IMAGE_WIDTH - 1) as f64;
             let g = j as f64 / (IMAGE_WIDTH - 1) as f64;
             let b = 0.25;
-            let v = Vec3::new(r, g, b);
-            let pixel_color = Color(v);
+            let pixel_color = Color::new(r, g, b);
 
             writeln!(bufout, "{}", pixel_color)?;
         }
