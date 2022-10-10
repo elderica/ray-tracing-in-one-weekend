@@ -1,0 +1,139 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'ray-tracing-in-one-weekend'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "ray-tracing-in-one-weekend",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'list1_1'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=list1_1",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_1",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'list1_1'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=list1_1",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_1",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'list1_7'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=list1_7",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_7",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'list1_7'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=list1_7",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_7",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'list1_9'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=list1_9",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_9",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'list1_9'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=list1_9",
+                    "--package=ray-tracing-in-one-weekend"
+                ],
+                "filter": {
+                    "name": "list1_9",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
