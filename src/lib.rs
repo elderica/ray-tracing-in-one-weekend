@@ -1,5 +1,6 @@
 use std::fmt::Display;
 use std::ops::{self, Neg};
+use std::rc::Rc;
 
 pub struct Color {
     r: f64,
@@ -243,6 +244,10 @@ impl HitRecord {
             front_face,
         }
     }
+
+    pub fn t(&self) -> f64 {
+        self.t
+    }
 }
 
 pub trait HitTable {
@@ -294,5 +299,36 @@ impl HitTable for Sphere {
         let h = HitRecord::new(p, t).set_face_normal(r, &outward_normal);
 
         Some(h)
+    }
+}
+
+#[derive(Default)]
+pub struct HitTableList {
+    objects: Vec<Rc<dyn HitTable>>,
+}
+
+impl HitTableList {
+    pub fn clear(&mut self) {
+        self.objects.clear();
+    }
+
+    pub fn add(&mut self, object: Rc<dyn HitTable>) {
+        self.objects.push(Rc::clone(&object))
+    }
+}
+
+impl HitTable for HitTableList {
+    fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+        let mut temp_rec = None;
+        let mut closest_so_far = t_max;
+
+        for object in self.objects.iter() {
+            if let Some(h) = object.hit(r, t_min, closest_so_far) {
+                closest_so_far = h.t();
+                temp_rec = Some(h);
+            }
+        }
+
+        temp_rec
     }
 }
