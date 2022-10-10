@@ -16,7 +16,7 @@ fn main() -> io::Result<()> {
     )?;
 
     for j in (0..IMAGE_HEIGHT).rev() {
-        writeln!(buferr, "Scanlines remaning:{}", j)?;
+        writeln!(buferr, "Scanlines remaining:{}", j)?;
         for i in 0..IMAGE_WIDTH {
             let r = i as f64 / (IMAGE_WIDTH - 1) as f64;
             let g = j as f64 / (IMAGE_WIDTH - 1) as f64;
