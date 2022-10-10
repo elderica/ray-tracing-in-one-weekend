@@ -22,7 +22,6 @@ fn vec3_to_color(v: Vec3) -> Color {
 fn ray_color(r: &Ray) -> Color {
     let t = hit_sphere(&Vec3::new(0.0, 0.0, -1.0), 0.5, r);
     if t > 0.0 {
-        // return Color::new(1.0, 0.0, 0.0);
         let a = r.at(t) - Vec3::new(0.0, 0.0, -1.0);
         let n = unit_vector(&a);
         return vec3_to_color(0.5 * Vec3::new(n.x() + 1.0, n.y() + 1.0, n.z() + 1.0));
