@@ -11,6 +11,18 @@ impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Self {
         Self { r, g, b }
     }
+
+    pub fn r(&self) -> f64 {
+        self.r
+    }
+
+    pub fn g(&self) -> f64 {
+        self.g
+    }
+
+    pub fn b(&self) -> f64 {
+        self.b
+    }
 }
 
 impl Display for Color {
@@ -136,6 +148,14 @@ impl ops::Mul<f64> for Vec3 {
 
     fn mul(self, rhs: f64) -> Self::Output {
         self * Self(rhs, rhs, rhs)
+    }
+}
+
+impl ops::Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        rhs * self
     }
 }
 
