@@ -1,7 +1,20 @@
-use ray_tracing_in_one_weekend::{unit_vector, Color, Point3, Ray, Vec3};
+use ray_tracing_in_one_weekend::{dot, unit_vector, Color, Point3, Ray, Vec3};
 use std::io::{self, BufWriter, Write};
 
+fn hit_sphere(center: &Point3, radius: f64, r: &Ray) -> bool {
+    let oc = *r.origin() - *center;
+    let a = dot(r.direction(), r.direction());
+    let b = 2.0 * dot(&oc, r.direction());
+    let c = dot(&oc, &oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
+
+    discriminant > 0.0
+}
+
 fn ray_color(r: &Ray) -> Color {
+    if hit_sphere(&Vec3::new(0.0, 0.0, -1.0), 0.5, r) {
+        return Color::new(1.0, 0.0, 0.0);
+    }
     let unit_direction = unit_vector(r.direction());
     let t = 0.5 * (unit_direction.y() + 1.0);
     let v = (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.5, 0.7, 1.0);
@@ -35,7 +48,7 @@ fn main() -> io::Result<()> {
     )?;
 
     for j in (0i32..image_height).rev() {
-        writeln!(buferr, "Scanlines remaining:{}", j)?;
+        writeln!(buferr, "Scan lines remaining:{}", j)?;
         for i in 0..image_width {
             let u = i as f64 / ((image_width - 1) as f64);
             let v = j as f64 / (image_height - 1) as f64;
