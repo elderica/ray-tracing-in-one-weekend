@@ -4,25 +4,6 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in library 'ray-tracing-in-one-weekend'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--lib",
-                    "--package=ray-tracing-in-one-weekend"
-                ],
-                "filter": {
-                    "name": "ray-tracing-in-one-weekend",
-                    "kind": "lib"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
             "name": "Debug executable 'ray-tracing-in-one-weekend'",
             "cargo": {
                 "args": [
