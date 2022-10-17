@@ -1,9 +1,11 @@
+use rand::{self, Rng};
 use std::{
     cell::{Ref, RefCell},
     io::{self, BufWriter, Write},
     rc::Rc,
 };
 
+mod camera;
 mod color;
 mod hittable;
 mod ray;
@@ -29,6 +31,7 @@ fn main() -> io::Result<()> {
     let aspect_ratio = 16.0 / 9.0;
     let image_width: i32 = 400;
     let image_height: i32 = (image_width as f64 / aspect_ratio) as i32;
+    let samples_per_pixel = 100;
 
     let world = Rc::new(RefCell::new(hittable::HitTableList::default()));
     world.borrow_mut().add(Rc::new(hittable::Sphere::new(
@@ -39,16 +42,6 @@ fn main() -> io::Result<()> {
         vec3::Vec3::new(0.0, -100.5, -1.0),
         100.0,
     )));
-
-    let viewport_height = 2.0;
-    let viewport_width = aspect_ratio * viewport_height;
-    let focal_length = 1.0;
-
-    let origin: rtweekend::Point3 = vec3::Vec3::new(0.0, 0.0, 0.0);
-    let horizontal = vec3::Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = vec3::Vec3::new(0.0, viewport_height, 0.0);
-    let lower_left_corner =
-        origin - (horizontal / 2.0) - (vertical / 2.0) - vec3::Vec3::new(0.0, 0.0, focal_length);
 
     let mut bufout = BufWriter::new(io::stdout().lock());
     let mut buferr = BufWriter::new(io::stderr().lock());
@@ -61,15 +54,19 @@ fn main() -> io::Result<()> {
         image_width, image_height
     )?;
 
-    for j in (0i32..image_height).rev() {
+    let cam = camera::Camera::new();
+    let mut rng = rand::thread_rng();
+    for j in (0..image_height).rev() {
         writeln!(buferr, "Scan lines remaining:{}", j)?;
         for i in 0..image_width {
-            let u = i as f64 / ((image_width - 1) as f64);
-            let v = j as f64 / (image_height - 1) as f64;
-            let d = lower_left_corner + (u * horizontal) + (v * vertical) - origin;
-            let r = ray::Ray::new(origin, d);
-            let pixel_color = ray_color(&r, world.borrow());
-            writeln!(bufout, "{}", pixel_color)?;
+            let mut pixel_color = color::Color::new(0.0, 0.0, 0.0);
+            for _ in 0..samples_per_pixel {
+                let u = (f64::from(i) + rng.gen::<f64>()) / f64::from(image_width - 1);
+                let v = (f64::from(j) + rng.gen::<f64>()) / f64::from(image_height - 1);
+                let r = cam.get_ray(u, v);
+                pixel_color += ray_color(&r, world.borrow());
+            }
+            color::write_color(&mut bufout, pixel_color, samples_per_pixel)?;
         }
     }
     writeln!(buferr, "Done.")?;
