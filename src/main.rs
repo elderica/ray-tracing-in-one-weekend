@@ -12,11 +12,11 @@ mod ray;
 mod rtweekend;
 mod vec3;
 
-fn vec3_to_color(v: vec3::Vec3) -> color::Color {
-    color::Color::new(v.x(), v.y(), v.z())
+fn vec3_to_color(v: vec3::Vec3) -> vec3::Color {
+    vec3::Color::new(v.x(), v.y(), v.z())
 }
 
-fn ray_color(r: &ray::Ray, world: Ref<dyn hittable::HitTable>) -> color::Color {
+fn ray_color(r: &ray::Ray, world: Ref<dyn hittable::HitTable>) -> vec3::Color {
     if let Some(rec) = world.hit(r, 0.0, rtweekend::INFINITY) {
         let v = 0.5 * (rec.normal() + vec3::Vec3::new(1.0, 1.0, 1.0));
         return vec3_to_color(v);
@@ -59,7 +59,7 @@ fn main() -> io::Result<()> {
     for j in (0..image_height).rev() {
         writeln!(err, "Scan lines remaining:{}", j)?;
         for i in 0..image_width {
-            let mut pixel_color = color::Color::new(0.0, 0.0, 0.0);
+            let mut pixel_color = vec3::Color::new(0.0, 0.0, 0.0);
             for _ in 0..samples_per_pixel {
                 let u = (f64::from(i) + rng.gen::<f64>()) / f64::from(image_width - 1);
                 let v = (f64::from(j) + rng.gen::<f64>()) / f64::from(image_height - 1);

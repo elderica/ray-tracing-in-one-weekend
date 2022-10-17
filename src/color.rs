@@ -1,29 +1,6 @@
 use crate::rtweekend::clamp;
-use std::{io, ops};
-
-pub struct Color {
-    r: f64,
-    g: f64,
-    b: f64,
-}
-
-impl Color {
-    pub fn new(r: f64, g: f64, b: f64) -> Self {
-        Self { r, g, b }
-    }
-
-    pub fn r(&self) -> f64 {
-        self.r
-    }
-
-    pub fn g(&self) -> f64 {
-        self.g
-    }
-
-    pub fn b(&self) -> f64 {
-        self.b
-    }
-}
+use crate::vec3::Color;
+use std::io;
 
 pub fn write_color<W: io::Write>(
     w: &mut W,
@@ -45,24 +22,4 @@ pub fn write_color<W: io::Write>(
 
     writeln!(w, "{} {} {}", cr, cg, cb)?;
     Ok(())
-}
-
-impl ops::AddAssign for Color {
-    fn add_assign(&mut self, rhs: Self) {
-        self.r += rhs.r;
-        self.g += rhs.g;
-        self.b += rhs.b;
-    }
-}
-
-impl ops::Add for Color {
-    type Output = Self;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self {
-            r: self.r + rhs.r,
-            g: self.g + rhs.g,
-            b: self.b + rhs.b,
-        }
-    }
 }

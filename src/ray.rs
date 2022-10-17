@@ -1,5 +1,4 @@
-use crate::rtweekend::Point3;
-use crate::vec3::Vec3;
+use crate::vec3::{Point3, Vec3};
 
 pub struct Ray {
     origin: Point3,

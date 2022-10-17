@@ -1,6 +1,5 @@
 use crate::ray::Ray;
-use crate::rtweekend::Point3;
-use crate::vec3::{dot, Vec3};
+use crate::vec3::{dot, Point3, Vec3};
 use std::ops::Neg;
 use std::rc::Rc;
 

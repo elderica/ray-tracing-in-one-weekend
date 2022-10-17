@@ -1,6 +1,9 @@
 use std::fmt::Display;
 use std::ops;
 
+pub type Color = Vec3;
+pub type Point3 = Vec3;
+
 #[derive(Clone, Copy)]
 pub struct Vec3(f64, f64, f64);
 
@@ -22,6 +25,18 @@ impl Vec3 {
     }
 
     pub fn z(&self) -> f64 {
+        self.2
+    }
+
+    pub fn r(&self) -> f64 {
+        self.0
+    }
+
+    pub fn g(&self) -> f64 {
+        self.1
+    }
+
+    pub fn b(&self) -> f64 {
         self.2
     }
 
