@@ -44,7 +44,7 @@ fn main() -> io::Result<()> {
     )));
 
     let mut bufout = BufWriter::new(io::stdout().lock());
-    let mut buferr = BufWriter::new(io::stderr().lock());
+    let mut err = io::stderr().lock();
 
     writeln!(
         bufout,
@@ -57,7 +57,7 @@ fn main() -> io::Result<()> {
     let cam = camera::Camera::new();
     let mut rng = rand::thread_rng();
     for j in (0..image_height).rev() {
-        writeln!(buferr, "Scan lines remaining:{}", j)?;
+        writeln!(err, "Scan lines remaining:{}", j)?;
         for i in 0..image_width {
             let mut pixel_color = color::Color::new(0.0, 0.0, 0.0);
             for _ in 0..samples_per_pixel {
@@ -69,7 +69,7 @@ fn main() -> io::Result<()> {
             color::write_color(&mut bufout, pixel_color, samples_per_pixel)?;
         }
     }
-    writeln!(buferr, "Done.")?;
+    writeln!(err, "Done.")?;
 
     Ok(())
 }
