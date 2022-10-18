@@ -12,9 +12,9 @@ pub fn write_color<W: io::Write>(
     let b = pixel_color.b();
 
     let scale = 1.0 / f64::from(samples_per_pixel);
-    let r: f64 = scale * r;
-    let g: f64 = scale * g;
-    let b: f64 = scale * b;
+    let r = f64::sqrt(scale * r);
+    let g = f64::sqrt(scale * g);
+    let b = f64::sqrt(scale * b);
 
     let cr = (256.0 * clamp(r, 0.0, 0.999)) as usize;
     let cg = (256.0 * clamp(g, 0.0, 0.999)) as usize;
