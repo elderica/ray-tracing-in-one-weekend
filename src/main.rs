@@ -18,7 +18,7 @@ fn ray_color(r: &ray::Ray, world: Ref<dyn hittable::HitTable>, depth: i32) -> ve
     }
 
     if let Some(rec) = world.hit(r, 0.001, rtweekend::INFINITY) {
-        let target: vec3::Point3 = rec.p() + rec.normal() + vec3::Vec3::random_in_unit_sphere();
+        let target: vec3::Point3 = rec.p() + rec.normal() + vec3::Vec3::random_unit_vector();
         return 0.5 * ray_color(&ray::Ray::new(rec.p(), target - rec.p()), world, depth - 1);
     }
 

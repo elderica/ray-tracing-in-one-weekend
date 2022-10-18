@@ -40,6 +40,10 @@ impl Vec3 {
             .expect("should be found")
     }
 
+    pub fn random_unit_vector() -> Self {
+        unit_vector(&Self::random_in_unit_sphere())
+    }
+
     pub fn x(&self) -> f64 {
         self.0
     }
