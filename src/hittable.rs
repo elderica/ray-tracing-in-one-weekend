@@ -39,12 +39,16 @@ impl HitRecord {
         }
     }
 
-    pub fn t(&self) -> f64 {
-        self.t
+    pub fn p(&self) -> Vec3 {
+        self.p
     }
 
     pub fn normal(&self) -> Vec3 {
         self.normal
+    }
+
+    pub fn t(&self) -> f64 {
+        self.t
     }
 }
 
