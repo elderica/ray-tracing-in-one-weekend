@@ -44,6 +44,15 @@ impl Vec3 {
         unit_vector(&Self::random_in_unit_sphere())
     }
 
+    pub fn random_in_hemisphere(&self) -> Self {
+        let in_unit_sphere = Self::random_in_unit_sphere();
+        if dot(&in_unit_sphere, self) > 0.0 {
+            in_unit_sphere
+        } else {
+            -in_unit_sphere
+        }
+    }
+
     pub fn x(&self) -> f64 {
         self.0
     }
