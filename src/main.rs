@@ -58,7 +58,8 @@ fn main() -> io::Result<()> {
     let cam = camera::Camera::new();
     let mut rng = rand::thread_rng();
     for j in (0..image_height).rev() {
-        writeln!(err, "Scan lines remaining:{}", j)?;
+        write!(err, "\rScan lines remaining: {} ", j)?;
+        err.flush()?;
         for i in 0..image_width {
             let mut pixel_color = vec3::Color::new(0.0, 0.0, 0.0);
             for _ in 0..samples_per_pixel {
@@ -70,7 +71,7 @@ fn main() -> io::Result<()> {
             color::write_color(&mut bufout, pixel_color, samples_per_pixel)?;
         }
     }
-    writeln!(err, "Done.")?;
+    writeln!(err, "\nDone.")?;
 
     Ok(())
 }
