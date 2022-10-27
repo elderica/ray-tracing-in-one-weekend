@@ -47,9 +47,9 @@ pub trait HitTable {
 }
 
 pub struct Sphere {
-    pub center: Point3,
-    pub radius: f64,
-    pub material: Rc<dyn Material>,
+    center: Point3,
+    radius: f64,
+    material: Rc<dyn Material>,
 }
 
 impl Sphere {
