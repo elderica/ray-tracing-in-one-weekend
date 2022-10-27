@@ -192,14 +192,6 @@ pub fn dot(u: &Vec3, v: &Vec3) -> f64 {
     u.0 * v.0 + u.1 * v.1 + u.2 * v.2
 }
 
-// pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
-//     Vec3(
-//         u.1 * v.2 - u.2 * v.1,
-//         u.2 * v.0 - u.0 * v.2,
-//         u.0 * v.1 - u.1 * v.0,
-//     )
-// }
-
 pub fn unit_vector(v: &Vec3) -> Vec3 {
     v.to_owned() / v.length()
 }

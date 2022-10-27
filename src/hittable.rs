@@ -9,19 +9,16 @@ pub struct HitRecord {
     normal: Vec3,
     material: Rc<dyn Material>,
     t: f64,
-    // front_face: bool,
 }
 
 impl HitRecord {
     pub fn new(p: Point3, t: f64, material: Rc<dyn Material>) -> Self {
-        // let front_face = false;
         let normal = Vec3::zero();
         Self {
             p,
             normal,
             material,
             t,
-            // front_face,
         }
     }
 
@@ -41,7 +38,6 @@ impl HitRecord {
             normal,
             material,
             t,
-            // front_face,
         }
     }
 
@@ -130,10 +126,6 @@ pub struct HitTableList {
 }
 
 impl HitTableList {
-    // pub fn clear(&mut self) {
-    //     self.objects.clear();
-    // }
-
     pub fn add(&mut self, object: Rc<dyn HitTable>) {
         self.objects.push(Rc::clone(&object))
     }
