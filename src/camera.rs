@@ -2,10 +2,10 @@ use crate::ray::Ray;
 use crate::vec3::{Point3, Vec3};
 
 pub struct Camera {
-    pub origin: Point3,
-    pub lower_left_corner: Point3,
-    pub horizontal: Vec3,
-    pub vertical: Vec3,
+    origin: Point3,
+    lower_left_corner: Point3,
+    horizontal: Vec3,
+    vertical: Vec3,
 }
 
 impl Camera {
