@@ -19,13 +19,13 @@ fn ray_color(r: &ray::Ray, world: Ref<dyn hittable::HitTable>, depth: i32) -> ve
     }
 
     if let Some(rec) = world.hit(r, 0.001, rtweekend::INFINITY) {
-        if let Some((attenuation, scattered)) = rec.material().scatter(r, &rec) {
+        if let Some((attenuation, scattered)) = rec.material.scatter(r, &rec) {
             return attenuation * ray_color(&scattered, world, depth - 1);
         }
         return vec3::Color::zero();
     }
 
-    let unit_direction = vec3::unit_vector(r.direction());
+    let unit_direction = vec3::unit_vector(&r.direction);
     let t = 0.5 * (unit_direction.y() + 1.0);
     (1.0 - t) * vec3::Color::new(1.0, 1.0, 1.0) + t * vec3::Color::new(0.5, 0.7, 1.0)
 }

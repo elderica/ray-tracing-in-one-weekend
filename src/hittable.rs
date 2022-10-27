@@ -5,9 +5,9 @@ use std::ops::Neg;
 use std::rc::Rc;
 
 pub struct HitRecord {
-    p: Point3,
-    normal: Vec3,
-    material: Rc<dyn Material>,
+    pub p: Point3,
+    pub normal: Vec3,
+    pub material: Rc<dyn Material>,
     t: f64,
 }
 
@@ -24,7 +24,7 @@ impl HitRecord {
 
     pub fn set_face_normal(&self, r: &Ray, outward_normal: &Vec3) -> Self {
         let p = self.p;
-        let front_face = dot(r.direction(), outward_normal) < 0.0;
+        let front_face = dot(&r.direction, outward_normal) < 0.0;
         let normal = if front_face {
             *outward_normal
         } else {
@@ -40,22 +40,6 @@ impl HitRecord {
             t,
         }
     }
-
-    pub fn p(&self) -> Vec3 {
-        self.p
-    }
-
-    pub fn normal(&self) -> Vec3 {
-        self.normal
-    }
-
-    pub fn t(&self) -> f64 {
-        self.t
-    }
-
-    pub fn material(&self) -> Rc<dyn Material> {
-        Rc::clone(&self.material)
-    }
 }
 
 pub trait HitTable {
@@ -63,9 +47,9 @@ pub trait HitTable {
 }
 
 pub struct Sphere {
-    center: Point3,
-    radius: f64,
-    material: Rc<dyn Material>,
+    pub center: Point3,
+    pub radius: f64,
+    pub material: Rc<dyn Material>,
 }
 
 impl Sphere {
@@ -76,25 +60,14 @@ impl Sphere {
             material,
         }
     }
-
-    pub fn center(&self) -> &Point3 {
-        &self.center
-    }
-    pub fn radius(&self) -> f64 {
-        self.radius
-    }
-
-    pub fn material(&self) -> Rc<dyn Material> {
-        Rc::clone(&self.material)
-    }
 }
 
 impl HitTable for Sphere {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
-        let oc = *r.origin() - self.center;
-        let a = r.direction().length_squared();
-        let half_b = dot(&oc, r.direction());
-        let c = oc.length_squared() - self.radius() * self.radius();
+        let oc = r.origin - self.center;
+        let a = r.direction.length_squared();
+        let half_b = dot(&oc, &r.direction);
+        let c = oc.length_squared() - self.radius * self.radius;
 
         let discriminant = half_b * half_b - a * c;
         if discriminant < 0.0 {
@@ -112,8 +85,8 @@ impl HitTable for Sphere {
 
         let t = root;
         let p = r.at(t);
-        let outward_normal = (p - *self.center()) / self.radius();
-        let material = self.material();
+        let outward_normal = (p - self.center) / self.radius;
+        let material = Rc::clone(&self.material);
         let h = HitRecord::new(p, t, material).set_face_normal(r, &outward_normal);
 
         Some(h)
@@ -138,7 +111,7 @@ impl HitTable for HitTableList {
 
         for object in self.objects.iter() {
             if let Some(h) = object.hit(r, t_min, closest_so_far) {
-                closest_so_far = h.t();
+                closest_so_far = h.t;
                 temp_rec = Some(h);
             }
         }

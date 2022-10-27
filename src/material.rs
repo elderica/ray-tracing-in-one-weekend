@@ -19,13 +19,13 @@ impl Lambertian {
 impl Material for Lambertian {
     fn scatter(&self, r_in: &Ray, rec: &HitRecord) -> Option<(Color, Ray)> {
         let _r = r_in;
-        let scatter_direction = rec.normal() + Vec3::random_unit_vector();
+        let scatter_direction = rec.normal + Vec3::random_unit_vector();
         let scatter_direction = if scatter_direction.near_zero() {
-            rec.normal()
+            rec.normal
         } else {
             scatter_direction
         };
-        let scattered = Ray::new(rec.p(), scatter_direction);
+        let scattered = Ray::new(rec.p, scatter_direction);
         let attenuation = self.albedo;
         Some((attenuation, scattered))
     }
@@ -43,9 +43,9 @@ impl Metal {
 
 impl Material for Metal {
     fn scatter(&self, r_in: &Ray, rec: &HitRecord) -> Option<(Color, Ray)> {
-        let reflected = reflect(unit_vector(r_in.direction()), rec.normal());
-        let scattered = Ray::new(rec.p(), reflected);
+        let reflected = reflect(unit_vector(&r_in.direction), rec.normal);
+        let scattered = Ray::new(rec.p, reflected);
         let attenuation = self.albedo;
-        (dot(scattered.direction(), &rec.normal()) > 0.0).then_some((attenuation, scattered))
+        (dot(&scattered.direction, &rec.normal) > 0.0).then_some((attenuation, scattered))
     }
 }
