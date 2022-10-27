@@ -84,6 +84,11 @@ impl Vec3 {
     pub fn length_squared(&self) -> f64 {
         self.0 * self.0 + self.1 * self.1 + self.2 * self.2
     }
+
+    pub fn near_zero(&self) -> bool {
+        let s = 1e-8;
+        self.0.abs() < s && self.1.abs() < s && self.2.abs() < s
+    }
 }
 
 impl ops::Neg for Vec3 {
@@ -197,4 +202,8 @@ pub fn dot(u: &Vec3, v: &Vec3) -> f64 {
 
 pub fn unit_vector(v: &Vec3) -> Vec3 {
     v.to_owned() / v.length()
+}
+
+pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+    v - 2.0 * dot(&v, &n) * n
 }

@@ -1,3 +1,4 @@
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::vec3::{dot, Point3, Vec3};
 use std::ops::Neg;
@@ -6,17 +7,19 @@ use std::rc::Rc;
 pub struct HitRecord {
     p: Point3,
     normal: Vec3,
+    material: Rc<dyn Material>,
     t: f64,
     // front_face: bool,
 }
 
 impl HitRecord {
-    pub fn new(p: Point3, t: f64) -> Self {
+    pub fn new(p: Point3, t: f64, material: Rc<dyn Material>) -> Self {
         // let front_face = false;
         let normal = Vec3::zero();
         Self {
             p,
             normal,
+            material,
             t,
             // front_face,
         }
@@ -24,16 +27,19 @@ impl HitRecord {
 
     pub fn set_face_normal(&self, r: &Ray, outward_normal: &Vec3) -> Self {
         let p = self.p;
-        let t = self.t;
         let front_face = dot(r.direction(), outward_normal) < 0.0;
         let normal = if front_face {
             *outward_normal
         } else {
             outward_normal.neg()
         };
+        let material = Rc::clone(&self.material);
+        let t = self.t;
+
         Self {
             p,
             normal,
+            material,
             t,
             // front_face,
         }
@@ -50,6 +56,10 @@ impl HitRecord {
     pub fn t(&self) -> f64 {
         self.t
     }
+
+    pub fn material(&self) -> Rc<dyn Material> {
+        Rc::clone(&self.material)
+    }
 }
 
 pub trait HitTable {
@@ -59,11 +69,16 @@ pub trait HitTable {
 pub struct Sphere {
     center: Point3,
     radius: f64,
+    material: Rc<dyn Material>,
 }
 
 impl Sphere {
-    pub fn new(center: Point3, radius: f64) -> Self {
-        Self { center, radius }
+    pub fn new(center: Point3, radius: f64, material: Rc<dyn Material>) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 
     pub fn center(&self) -> &Point3 {
@@ -71,6 +86,10 @@ impl Sphere {
     }
     pub fn radius(&self) -> f64 {
         self.radius
+    }
+
+    pub fn material(&self) -> Rc<dyn Material> {
+        Rc::clone(&self.material)
     }
 }
 
@@ -98,7 +117,8 @@ impl HitTable for Sphere {
         let t = root;
         let p = r.at(t);
         let outward_normal = (p - *self.center()) / self.radius();
-        let h = HitRecord::new(p, t).set_face_normal(r, &outward_normal);
+        let material = self.material();
+        let h = HitRecord::new(p, t, material).set_face_normal(r, &outward_normal);
 
         Some(h)
     }

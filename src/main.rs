@@ -8,6 +8,7 @@ use std::{
 mod camera;
 mod color;
 mod hittable;
+mod material;
 mod ray;
 mod rtweekend;
 mod vec3;
@@ -18,8 +19,10 @@ fn ray_color(r: &ray::Ray, world: Ref<dyn hittable::HitTable>, depth: i32) -> ve
     }
 
     if let Some(rec) = world.hit(r, 0.001, rtweekend::INFINITY) {
-        let target: vec3::Point3 = rec.p() + rec.normal().random_in_hemisphere();
-        return 0.5 * ray_color(&ray::Ray::new(rec.p(), target - rec.p()), world, depth - 1);
+        if let Some((attenuation, scattered)) = rec.material().scatter(r, &rec) {
+            return attenuation * ray_color(&scattered, world, depth - 1);
+        }
+        return vec3::Color::zero();
     }
 
     let unit_direction = vec3::unit_vector(r.direction());
@@ -35,13 +38,34 @@ fn main() -> io::Result<()> {
     let max_depth = 50;
 
     let world = Rc::new(RefCell::new(hittable::HitTableList::default()));
+    let material_ground: Rc<dyn material::Material> =
+        Rc::new(material::Lambertian::new(vec3::Color::new(0.8, 0.8, 0.0)));
+    let material_center: Rc<dyn material::Material> =
+        Rc::new(material::Lambertian::new(vec3::Color::new(0.7, 0.3, 0.3)));
+    let material_left: Rc<dyn material::Material> =
+        Rc::new(material::Metal::new(vec3::Color::new(0.8, 0.8, 0.8)));
+    let material_right: Rc<dyn material::Material> =
+        Rc::new(material::Metal::new(vec3::Color::new(0.8, 0.6, 0.2)));
+
     world.borrow_mut().add(Rc::new(hittable::Sphere::new(
-        vec3::Vec3::new(0.0, 0.0, -1.0),
-        0.5,
+        vec3::Point3::new(0.0, -100.5, -1.0),
+        100.0,
+        Rc::clone(&material_ground),
     )));
     world.borrow_mut().add(Rc::new(hittable::Sphere::new(
-        vec3::Vec3::new(0.0, -100.5, -1.0),
-        100.0,
+        vec3::Point3::new(0.0, 0.0, -1.0),
+        0.5,
+        Rc::clone(&material_center),
+    )));
+    world.borrow_mut().add(Rc::new(hittable::Sphere::new(
+        vec3::Point3::new(-1.0, 0.0, -1.0),
+        0.5,
+        Rc::clone(&material_left),
+    )));
+    world.borrow_mut().add(Rc::new(hittable::Sphere::new(
+        vec3::Point3::new(1.0, 0.0, -1.0),
+        0.5,
+        Rc::clone(&material_right),
     )));
 
     let mut bufout = BufWriter::new(io::stdout().lock());
