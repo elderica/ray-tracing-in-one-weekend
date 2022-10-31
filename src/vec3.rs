@@ -41,12 +41,12 @@ impl Vec3 {
     }
 
     pub fn random_unit_vector() -> Self {
-        unit_vector(&Self::random_in_unit_sphere())
+        unit_vector(Self::random_in_unit_sphere())
     }
 
     pub fn random_in_hemisphere(&self) -> Self {
         let in_unit_sphere = Self::random_in_unit_sphere();
-        if dot(&in_unit_sphere, self) > 0.0 {
+        if dot(in_unit_sphere, *self) > 0.0 {
             in_unit_sphere
         } else {
             -in_unit_sphere
@@ -188,14 +188,14 @@ impl ops::Div<f64> for Vec3 {
     }
 }
 
-pub fn dot(u: &Vec3, v: &Vec3) -> f64 {
+pub fn dot(u: Vec3, v: Vec3) -> f64 {
     u.0 * v.0 + u.1 * v.1 + u.2 * v.2
 }
 
-pub fn unit_vector(v: &Vec3) -> Vec3 {
-    v.to_owned() / v.length()
+pub fn unit_vector(v: Vec3) -> Vec3 {
+    v / v.length()
 }
 
 pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
-    v - 2.0 * dot(&v, &n) * n
+    v - 2.0 * dot(v, n) * n
 }

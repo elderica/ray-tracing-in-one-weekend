@@ -22,11 +22,11 @@ impl HitRecord {
         }
     }
 
-    pub fn set_face_normal(&self, r: &Ray, outward_normal: &Vec3) -> Self {
+    pub fn set_face_normal(&self, r: &Ray, outward_normal: Vec3) -> Self {
         let p = self.p;
-        let front_face = dot(&r.direction, outward_normal) < 0.0;
+        let front_face = dot(r.direction, outward_normal) < 0.0;
         let normal = if front_face {
-            *outward_normal
+            outward_normal
         } else {
             outward_normal.neg()
         };
@@ -66,7 +66,7 @@ impl HitTable for Sphere {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = r.origin - self.center;
         let a = r.direction.length_squared();
-        let half_b = dot(&oc, &r.direction);
+        let half_b = dot(oc, r.direction);
         let c = oc.length_squared() - self.radius * self.radius;
 
         let discriminant = half_b * half_b - a * c;
@@ -87,7 +87,7 @@ impl HitTable for Sphere {
         let p = r.at(t);
         let outward_normal = (p - self.center) / self.radius;
         let material = Rc::clone(&self.material);
-        let h = HitRecord::new(p, t, material).set_face_normal(r, &outward_normal);
+        let h = HitRecord::new(p, t, material).set_face_normal(r, outward_normal);
 
         Some(h)
     }
