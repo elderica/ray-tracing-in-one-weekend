@@ -5,7 +5,7 @@ use std::{
 };
 
 mod material;
-use material::{Lambertian, Material, Metal};
+use material::{Dielectric, Lambertian, Material, Metal};
 
 mod vec3;
 use vec3::{Color, Point3};
@@ -48,8 +48,8 @@ fn main() -> io::Result<()> {
 
     let mut world = HitTableList::default();
     let material_ground: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.8, 0.8, 0.0)));
-    let material_center: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.7, 0.3, 0.3)));
-    let material_left: Rc<dyn Material> = Rc::new(Metal::new(Color::new(0.8, 0.8, 0.8), 0.3));
+    let material_center: Rc<dyn Material> = Rc::new(Dielectric::new(1.5));
+    let material_left: Rc<dyn Material> = Rc::new(Dielectric::new(1.5));
     let material_right: Rc<dyn Material> = Rc::new(Metal::new(Color::new(0.8, 0.6, 0.2), 1.0));
 
     world.add(Rc::new(Sphere::new(
