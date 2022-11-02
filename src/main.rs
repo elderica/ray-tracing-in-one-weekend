@@ -11,7 +11,7 @@ mod vec3;
 use vec3::{Color, Point3};
 
 mod hittable;
-use hittable::{HitTable, HitTableList, Sphere};
+use hittable::{Hittable, HittableList, Sphere};
 
 mod camera;
 use camera::Camera;
@@ -22,7 +22,7 @@ use ray::Ray;
 mod color;
 mod rtweekend;
 
-fn ray_color(r: &Ray, world: &impl HitTable, depth: i32) -> Color {
+fn ray_color(r: &Ray, world: &impl Hittable, depth: i32) -> Color {
     if depth <= 0 {
         return Color::zero();
     }
@@ -46,7 +46,7 @@ fn main() -> io::Result<()> {
     let samples_per_pixel = 100;
     let max_depth = 50;
 
-    let mut world = HitTableList::default();
+    let mut world = HittableList::default();
     let material_ground: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.8, 0.8, 0.0)));
     let material_center: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.1, 0.2, 0.5)));
     let material_left: Rc<dyn Material> = Rc::new(Dielectric::new(1.5));

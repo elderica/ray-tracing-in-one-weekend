@@ -45,7 +45,7 @@ impl HitRecord {
     }
 }
 
-pub trait HitTable {
+pub trait Hittable {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord>;
 }
 
@@ -65,7 +65,7 @@ impl Sphere {
     }
 }
 
-impl HitTable for Sphere {
+impl Hittable for Sphere {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = r.origin - self.center;
         let a = r.direction.length_squared();
@@ -97,17 +97,17 @@ impl HitTable for Sphere {
 }
 
 #[derive(Default)]
-pub struct HitTableList {
-    objects: Vec<Rc<dyn HitTable>>,
+pub struct HittableList {
+    objects: Vec<Rc<dyn Hittable>>,
 }
 
-impl HitTableList {
-    pub fn add(&mut self, object: Rc<dyn HitTable>) {
+impl HittableList {
+    pub fn add(&mut self, object: Rc<dyn Hittable>) {
         self.objects.push(Rc::clone(&object))
     }
 }
 
-impl HitTable for HitTableList {
+impl Hittable for HittableList {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let mut temp_rec = None;
         let mut closest_so_far = t_max;
