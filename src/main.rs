@@ -1,4 +1,5 @@
 use rand::{self, Rng};
+use rtweekend::PI;
 use std::{
     io::{self, BufWriter, Write},
     rc::Rc,
@@ -46,36 +47,19 @@ fn main() -> io::Result<()> {
     let samples_per_pixel = 100;
     let max_depth = 50;
 
+    let r = f64::cos(PI / 4.0);
     let mut world = HittableList::default();
-    let material_ground: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.8, 0.8, 0.0)));
-    let material_center: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.1, 0.2, 0.5)));
-    let material_left: Rc<dyn Material> = Rc::new(Dielectric::new(1.5));
-    let material_right: Rc<dyn Material> = Rc::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0));
+    let material_left: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(0.0, 0.0, 1.0)));
+    let material_right: Rc<dyn Material> = Rc::new(Lambertian::new(Color::new(1.0, 0.0, 0.0)));
 
     world.add(Rc::new(Sphere::new(
-        Point3::new(0.0, -100.5, -1.0),
-        100.0,
-        Rc::clone(&material_ground),
-    )));
-    world.add(Rc::new(Sphere::new(
-        Point3::new(0.0, 0.0, -1.0),
-        0.5,
-        Rc::clone(&material_center),
-    )));
-    world.add(Rc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        0.5,
+        Point3::new(-r, 0.0, -1.0),
+        r,
         Rc::clone(&material_left),
     )));
     world.add(Rc::new(Sphere::new(
-        Point3::new(-1.0, 0.0, -1.0),
-        -0.4,
-        Rc::clone(&material_left),
-    )));
-
-    world.add(Rc::new(Sphere::new(
-        Point3::new(1.0, 0.0, -1.0),
-        0.5,
+        Point3::new(r, 0.0, -1.0),
+        r,
         Rc::clone(&material_right),
     )));
 
@@ -90,7 +74,7 @@ fn main() -> io::Result<()> {
         image_width, image_height
     )?;
 
-    let cam = Camera::new();
+    let cam = Camera::new(90.0, aspect_ratio);
     let mut rng = rand::thread_rng();
     for j in (0..image_height).rev() {
         write!(err, "\rScan lines remaining: {} ", j)?;
